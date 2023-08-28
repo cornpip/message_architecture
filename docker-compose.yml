@@ -1,0 +1,48 @@
+services:
+    nginx:
+        image: nginx
+        ports:
+            - '80:80'
+        volumes:
+            - ./nginx.conf:/etc/nginx/nginx.conf
+        environment:
+            - NGINX_PORT=80
+
+    messenger:
+        image: azul/zulu-openjdk-alpine:17-jre-latest
+        ports:
+            - '8080:8080'
+        volumes:
+            - ./messenger_server:/server
+        command:
+            - /bin/sh
+            - -c
+            - |
+                cd server
+                java -jar messenger-0.0.1-SNAPSHOT.jar
+
+    server1:
+        image: azul/zulu-openjdk-alpine:17-jre-latest
+        ports:
+            - '10010:8080'
+        volumes:
+            - ./server2:/server2
+        command:
+            - /bin/sh
+            - -c
+            - |
+                cd server2
+                java -jar message_websocket-1.0-SNAPSHOT.jar
+
+    server2:
+        image: azul/zulu-openjdk-alpine:17-jre-latest
+        ports:
+            - '10011:8080'
+        volumes:
+            - ./server2:/server2
+        command:
+            - /bin/sh
+            - -c
+            - |
+                cd server2
+                java -jar message_websocket-1.0-SNAPSHOT.jar
