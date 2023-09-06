@@ -168,3 +168,5 @@ dist
 *.txt
 *.tmp
 *.gz
+
+legacy
